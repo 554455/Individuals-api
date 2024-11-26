@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface UserRepository {
-    Token createNewUser(User user);
+    String createNewUser(User user);
 }

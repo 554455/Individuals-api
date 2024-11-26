@@ -22,16 +22,16 @@ public class SpringSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/v1/auth/**").permitAll() // разрешить доступ ко всем URL /v1/auth/*
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer((oauth2) -> oauth2
-                        .jwt(Customizer.withDefaults())
-                );
+                .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
+                        .jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder()) ) );
         return http.build();
     }
 
     @Bean
     public JwtDecoder jwtDecoder(){
-        return JwtDecoders.fromIssuerLocation("http://localhost:8080/realms/individuals-api");
+        return JwtDecoders.fromIssuerLocation("http://localhost:8080/realms/Individuals-api");
     }
 }

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: individuals-api
+    name: Individuals-api
   security:
     oauth2:
       resourceserver:
@@ -9,9 +9,13 @@ spring:
 app:
   keycloak:
     admin:
-      clientId: servlet-app
-      clientSecret: 9kKNQwDNgy8nDamUCdPKbgr4FTZGNgPM
-    realm: individuals-api
+      clientId: admin-cli
+      clientSecret: YEO1Os7WQ9UGIIHQJPwSDakADpiOzjNY
+    realm: master
     serverUrl: http://localhost:8080
 server:
   port: 8081
+logging:
+  level:
+    org.springframework: DEBUG
+    org.keycloak: DEBUG
