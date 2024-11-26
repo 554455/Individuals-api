@@ -22,13 +22,18 @@ public class UserRegistrationService implements UserRepository{
 
     private final KeycloakConfig keycloakConfig;
     @Override
-    public Token createNewUser(User user) {
+    public String createNewUser(User user) {
         UserRepresentation userRepresentation = new UserRepresentation();
         userRepresentation.setEmail(user.getEmail());
         userRepresentation.setEmailVerified(false);
-        userRepresentation.setUsername(user.getUsername());
+        userRepresentation.setEnabled(true);
+        userRepresentation.setUsername(user.getEmail());
+
+        String token = keycloakConfig.keycloak().tokenManager().getAccessToken().getToken();
 
         Response response = keycloakConfig.keycloak().realm(realm).users().create(userRepresentation);
+        System.out.println("Response Status: " + response.getStatus());
+        System.out.println("Response Body: " + response.readEntity(String.class));
 
         String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
 
@@ -38,7 +43,8 @@ public class UserRegistrationService implements UserRepository{
         credentialRepresentation.setValue(user.getPassword());
 
         keycloakConfig.keycloak().realm(realm).users().get(userId).resetPassword(credentialRepresentation);
+        System.out.println(token);
 
-        return null;
+        return token;
     }
 }

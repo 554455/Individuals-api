@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class User {
 
-    String username;
+    String confirm_password;
     String password;
-    String firstName;
-    String lastName;
     String email;
+
+
 }

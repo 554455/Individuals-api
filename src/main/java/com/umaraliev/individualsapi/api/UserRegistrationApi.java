@@ -16,13 +16,20 @@ public class UserRegistrationApi {
     private final UserRegistrationService userRegistrationService;
 
     @PostMapping("/registration")
-    public Token userNewRegistration(@RequestBody User user){
-        userRegistrationService.createNewUser(user);
-        return null;
+    public String userNewRegistration(@RequestBody User user){
+
+        return userRegistrationService.createNewUser(user);
     }
 
     @GetMapping("/hello")
     public String hello() {
-        return "Hello";
+
+        User user = new User();
+        user.setConfirm_password("123456");
+        user.setEmail("rerrrtrrtrer@example.com");
+        user.setPassword("123456");
+
+        ;
+        return userRegistrationService.createNewUser(user);
     }
 }

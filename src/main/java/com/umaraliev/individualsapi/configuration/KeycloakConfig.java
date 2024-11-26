@@ -1,5 +1,6 @@
 package com.umaraliev.individualsapi.configuration;
 
+import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientBuilderImpl;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +27,12 @@ public class KeycloakConfig {
                 .clientSecret(clientSecret)
                 .clientId(clientId)
                 .grantType("client_credentials")
-                .realm(realm)
+                .realm("master")
+                .username("admin")
+                .password("admin")
                 .serverUrl(serverUrl)
+                .resteasyClient(new ResteasyClientBuilderImpl().connectionPoolSize(10).build())
                 .build();
     }
+
 }

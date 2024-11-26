@@ -4,7 +4,7 @@ info:
   description: API для регистрации, аутентификации, обновления токенов и получения данных пользователей.
   version: 1.0.0
 servers:
-  - url: https://HOST/v1
+  - url: https://localhost:8080/v1
 paths:
   /auth/registration:
     post:
