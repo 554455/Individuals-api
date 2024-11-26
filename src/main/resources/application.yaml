@@ -1,24 +1,17 @@
 spring:
   application:
     name: individuals-api
-    r2dbc:
-      url: r2dbc:postgresql://localhost:5432/individuals
-      username: postgres
-      password: postgres
-      driver: org.postgresql.Driver
-
   security:
     oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: individuals
-            client-secret: 2b9d4e9b-3a2c-4e5f-8a7a-2a3b4c5d6e7f
-            scope: openid, profile, email
-            authorization-grant-type: authorization_code
-        provider:
-            keycloak:
-              issuer-uri: http://localhost:8080/auth/realms/individuals
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/auth/realms/individuals
+          issuer-uri: ${app.keycloak.serverUrl}/realms/${app.keycloak.realm}
+app:
+  keycloak:
+    admin:
+      clientId: servlet-app
+      clientSecret: 9kKNQwDNgy8nDamUCdPKbgr4FTZGNgPM
+    realm: individuals-api
+    serverUrl: http://localhost:8080
+server:
+  port: 8081
