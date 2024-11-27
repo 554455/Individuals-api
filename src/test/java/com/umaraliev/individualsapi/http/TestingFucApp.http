@@ -1,0 +1,21 @@
+POST http://localhost:8080/realms/master/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type = client_credentials &
+client_id = admin-cli &
+client_secret = KlZ51o0ufzVzB2ePyDCecbHpH6KpZaTM
+
+###
+
+POST http://localhost:8081/v1/auth/registration
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJIVnEtQU5rR1g5U3JQaGFQM1JKVWxqZ3JRTzgwVEdWRWVzbHdobXN3ZFNFIn0.eyJleHAiOjE3MzI3MTQ2OTksImlhdCI6MTczMjcxNDA5OCwianRpIjoiMTIyYzcwMTgtNDhmMS00MGRjLWE3YWEtMzFmZWRlMWE4Y2Q5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXN0ZXIiLCJzdWIiOiIyZmE4YTA3YS04OWE5LTQxMzctODczYy1hNWQ1Mzk2MTE0MGQiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhZG1pbi1jbGkiLCJzY29wZSI6InByb2ZpbGUgZW1haWwifQ.EfHEGagTDRGnugreOETBmmcE-9VtLvVBfF0zBJqW8zeo2CJ4yk0Gsb3jcZq_uNOBwAIqXGv7pNnAHoRKx_LNEHy1vo5NQWqLIF19wqaE_YhEdOZ4kpIc1pGZKhtn2hyskVL_7QErIZXmfykcGQbUhFBtIL30PCsTzITIYTCs4n8PVuVudymjn7v9iL8gaVsEVLxXex-pmyPty45MeZV8YnrIsa1zNvCk9OYypvKRHfymKtdKd1GRHfAvCLVppMA1rjLExGT2OZi2vYRXmbLXYQvMBJA7fx3hOgJxapTlqA2BKv7It0OljS3TZcNZ2Hew-qCQBL1eKTzJxufb9B41JQ
+Content-Type: application/json
+
+{
+  "username": "Hello",
+  "email": "sdfsd;;;;;",
+  "password": "sdfs,,,,"
+}
+
+###
+
