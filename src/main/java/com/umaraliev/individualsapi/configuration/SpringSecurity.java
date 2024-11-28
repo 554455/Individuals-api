@@ -32,6 +32,6 @@ public class SpringSecurity {
 
     @Bean
     public JwtDecoder jwtDecoder(){
-        return JwtDecoders.fromIssuerLocation("http://localhost:8080/realms/Individuals-api");
+        return JwtDecoders.fromIssuerLocation("http://localhost:8080/realms/master");
     }
 }

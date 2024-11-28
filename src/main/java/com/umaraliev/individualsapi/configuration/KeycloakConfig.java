@@ -1,5 +1,6 @@
 package com.umaraliev.individualsapi.configuration;
 
+import com.umaraliev.individualsapi.dto.UserAuthTokenDTO;
 import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientBuilderImpl;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -30,6 +31,19 @@ public class KeycloakConfig {
                 .realm("master")
                 .username("admin")
                 .password("admin")
+                .serverUrl(serverUrl)
+                .resteasyClient(new ResteasyClientBuilderImpl().connectionPoolSize(10).build())
+                .build();
+    }
+
+    public Keycloak KeycloakUserTokens(UserAuthTokenDTO userAuthTokenDTO){
+        return KeycloakBuilder.builder()
+                .clientSecret("OozrPtLMCvUcmetbBoQYCnGh0FjJrwdV")
+                .clientId("user-auth-tokens")
+                .grantType("password")
+                .realm(realm)
+                .username(userAuthTokenDTO.getUsername())
+                .password(userAuthTokenDTO.getPassword())
                 .serverUrl(serverUrl)
                 .resteasyClient(new ResteasyClientBuilderImpl().connectionPoolSize(10).build())
                 .build();
