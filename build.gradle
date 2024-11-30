@@ -30,13 +30,15 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.nimbusds:oauth2-oidc-sdk:9.15'
+    implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'org.keycloak:keycloak-admin-client:23.0.1'
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+//    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:junit-jupiter'
+    runtimeOnly 'org.springframework.boot:spring-boot-docker-compose'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
