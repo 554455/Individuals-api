@@ -9,9 +9,17 @@ spring:
 app:
   keycloak:
     admin:
-      clientId: admin-cli
-      clientSecret: YEO1Os7WQ9UGIIHQJPwSDakADpiOzjNY
+      client-id: individuals-admin
+      client-secret: KOzy1W7CS1eHaa9qqIM4lEwzS97MyI2z
+      username: admin
+      password: admin
     realm: master
+    user-auth-tokens:
+      client-id: user-auth-tokens
+      client-secret: OBUCR6mlUeZhoATQEEqON8YjBGUqvGHu
+    user-exchange-tokens:
+      client-id: user-exchange-tokens
+      client-secret: A6RMYlO04h4KihPYgjgWe4fP10GRnQHN
     serverUrl: http://localhost:8080
 server:
   port: 8081

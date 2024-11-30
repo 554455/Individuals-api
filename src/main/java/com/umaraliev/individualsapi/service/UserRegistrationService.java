@@ -30,10 +30,12 @@ public class UserRegistrationService implements UserRepository{
         userRepresentation.setUsername(user.getEmail());
 
         String token = keycloakConfig.keycloak().tokenManager().getAccessToken().getToken();
-
-        Response response = keycloakConfig.keycloak().realm(realm).users().create(userRepresentation);
-        System.out.println("Response Status: " + response.getStatus());
-        System.out.println("Response Body: " + response.readEntity(String.class));
+        Response response;
+        try {
+            response = keycloakConfig.keycloak().realm(realm).users().create(userRepresentation);
+        }catch (Exception e){
+            return "User with:" + user.getEmail() + " already registered";
+        }
 
         String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
 
