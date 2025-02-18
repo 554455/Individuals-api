@@ -42,7 +42,7 @@ public class UserRegistrationService implements UserRepository{
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setTemporary(false);
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
-        credentialRepresentation.setValue(user.getPassword());
+        credentialRepresentation.setValue(user.getSecretKey());
 
         keycloakConfig.keycloak().realm(realm).users().get(userId).resetPassword(credentialRepresentation);
         System.out.println(token);

@@ -21,6 +21,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -32,6 +33,13 @@ dependencies {
     implementation 'com.nimbusds:oauth2-oidc-sdk:9.15'
     implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'org.keycloak:keycloak-admin-client:23.0.1'
+    implementation files('src/libs/common/0.0.1-SNAPSHOT/common-0.0.1-SNAPSHOT-plain.jar')
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final' // Основная зависимость MapStruct
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final' // Обработка аннотаций MapStruct
+
+    // Связка Lombok и MapStruct
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0' // Для совместимости Lombok и MapStruct
+
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
