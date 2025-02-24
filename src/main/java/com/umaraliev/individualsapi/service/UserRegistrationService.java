@@ -7,6 +7,7 @@ import com.umaraliev.individualsapi.model.User;
 import com.umaraliev.individualsapi.repository.UserRepository;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.Token;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserRegistrationService implements UserRepository{
@@ -44,6 +46,7 @@ public class UserRegistrationService implements UserRepository{
             userRepresentation.setAttributes(attributes);
 
 
+            log.info("Request to create a new user in the keycloak + userRepresentation {}", userRepresentation);
             Response response = keycloakConfig.keycloak().realm(realm).users().create(userRepresentation);
 
             CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
@@ -51,6 +54,7 @@ public class UserRegistrationService implements UserRepository{
             credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
             credentialRepresentation.setValue(user.secretKey);
 
+            log.info("Request to keycloak to change passwords + user.secretKey {}", user.secretKey);
             keycloakConfig.keycloak()
                     .realm(realm)
                     .users()
@@ -61,7 +65,6 @@ public class UserRegistrationService implements UserRepository{
             requestPersonAPIService.requestRemoveUserPersonAPI(user);
             throw new RuntimeException("An error occurred while saving the user in keycloak" + e.getMessage());
         }
-
-        return keycloakConfig.keycloak().tokenManager().getAccessToken().getToken();
+        return "User created successfully";
     }
 }
