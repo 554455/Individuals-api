@@ -67,14 +67,14 @@ public class KeycloakConfig {
                 .build();
     }
 
-    public Keycloak KeycloakUserTokens(User user){
+    public Keycloak KeycloakUserTokens(UserAuthTokenDTO userAuthTokenDTO){
         return KeycloakBuilder.builder()
                 .clientSecret(clientSecretUserAuthTokens)
                 .clientId(clientIdUserAuthTokens)
                 .grantType("password")
                 .realm(realm)
-                .username(user.getEmail())
-                .password(user.getSecretKey())
+                .username(userAuthTokenDTO.getUsername())
+                .password(userAuthTokenDTO.getPassword())
                 .serverUrl(serverUrl)
                 .resteasyClient(new ResteasyClientBuilderImpl().connectionPoolSize(10).build())
                 .build();

@@ -9,9 +9,9 @@ import java.util.UUID;
 @Data
 @Component
 public class User {
-
     public UUID id;
     public String secretKey;
     public String email;
-
+    public String firstName;
+    public String lastName;
 }

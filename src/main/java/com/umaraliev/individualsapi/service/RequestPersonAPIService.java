@@ -18,16 +18,23 @@ public class RequestPersonAPIService {
     private final UserMapper userMapper;
 
     @Value("${person.api.registration-url}")
-    private String urlPersonAPIService;
+    private String urlRegistrationUserPersonAPIService;
 
-    public User requestPersonAPI(IndividualDTO IndividualDTO) {
+    @Value("${person.api.remove-url}")
+    private String urlRemoveUserPersonAPIService;
+
+    public User requestRegistrationUserPersonAPI(IndividualDTO IndividualDTO) {
         ResponseEntity<ResponseIndividualDTO> responseIndividualDTOResponseEntity = restTemplate.postForEntity(
-                urlPersonAPIService,
+                urlRegistrationUserPersonAPIService,
                 IndividualDTO,
                 ResponseIndividualDTO.class
         );
         ResponseIndividualDTO responseIndividualDTO = responseIndividualDTOResponseEntity.getBody();
 
         return userMapper.toUserEntity(responseIndividualDTO);
+    }
+
+    public void requestRemoveUserPersonAPI(User user) {
+        restTemplate.delete(urlRegistrationUserPersonAPIService + "/" + user.getId());
     }
 }

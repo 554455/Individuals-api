@@ -1,6 +1,7 @@
 package com.umaraliev.individualsapi.controllers;
 
 import com.umaraliev.common.dto.IndividualDTO;
+import com.umaraliev.individualsapi.dto.UserAuthTokenDTO;
 import com.umaraliev.individualsapi.model.User;
 import com.umaraliev.individualsapi.service.ReceiveUserTokensService;
 import com.umaraliev.individualsapi.service.RequestPersonAPIService;
@@ -22,16 +23,16 @@ public class AuthController {
 
     @PostMapping("/registration")
     public AccessTokenResponse userNewRegistration(@RequestBody IndividualDTO individualDTO){
-
-        User user = requestPersonAPIService.requestPersonAPI(individualDTO);
+        User user = requestPersonAPIService.requestRegistrationUserPersonAPI(individualDTO);
+        UserAuthTokenDTO userAuthTokenDTO = new UserAuthTokenDTO(user.getEmail(), user.secretKey);
         userRegistrationService.createNewUser(user);
-        return receiveUserTokensService.receiveUserTokens(user);
+        return receiveUserTokensService.receiveUserTokens(userAuthTokenDTO);
     }
 
-//    @GetMapping("/login")
-//    public AccessTokenResponse receiveUserTokens(@RequestBody UserAuthTokenDTO userAuthTokenDTO){
-//        return  receiveUserTokensService.receiveUserTokens(userAuthTokenDTO);
-//    }
+    @GetMapping("/login")
+    public AccessTokenResponse receiveUserTokens(@RequestBody UserAuthTokenDTO userAuthTokenDTO){
+        return  receiveUserTokensService.receiveUserTokens(userAuthTokenDTO);
+    }
 
     @GetMapping("/exchange")
     public String exchangeToken(){

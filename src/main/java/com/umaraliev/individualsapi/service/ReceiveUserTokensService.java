@@ -13,7 +13,7 @@ public class ReceiveUserTokensService {
 
     public final KeycloakConfig keycloakConfig;
 
-    public AccessTokenResponse receiveUserTokens(User user) {
-        return keycloakConfig.KeycloakUserTokens(user).tokenManager().getAccessToken();
+    public AccessTokenResponse receiveUserTokens(UserAuthTokenDTO userAuthTokenDTO) {
+        return keycloakConfig.KeycloakUserTokens(userAuthTokenDTO).tokenManager().getAccessToken();
     }
 }
