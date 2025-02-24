@@ -24,11 +24,17 @@ public class RequestPersonAPIService {
     private String urlRemoveUserPersonAPIService;
 
     public User requestRegistrationUserPersonAPI(IndividualDTO IndividualDTO) {
-        ResponseEntity<ResponseIndividualDTO> responseIndividualDTOResponseEntity = restTemplate.postForEntity(
-                urlRegistrationUserPersonAPIService,
-                IndividualDTO,
-                ResponseIndividualDTO.class
-        );
+        ResponseEntity<ResponseIndividualDTO> responseIndividualDTOResponseEntity;
+
+        try {
+            responseIndividualDTOResponseEntity = restTemplate.postForEntity(
+                    urlRegistrationUserPersonAPIService,
+                    IndividualDTO,
+                    ResponseIndividualDTO.class
+            );
+        }catch (Exception e) {
+            throw new RuntimeException("An error occurred when requesting registration in the person-api microservice" + e.getMessage());
+        }
         ResponseIndividualDTO responseIndividualDTO = responseIndividualDTOResponseEntity.getBody();
 
         return userMapper.toUserEntity(responseIndividualDTO);

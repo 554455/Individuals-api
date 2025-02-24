@@ -30,39 +30,38 @@ public class UserRegistrationService implements UserRepository{
 
     @Override
     public String createNewUser(User user) {
-        UserRepresentation userRepresentation = new UserRepresentation();
-        userRepresentation.setEmailVerified(false);
-        userRepresentation.setEnabled(true);
-        userRepresentation.setEmail(user.getEmail());
-        userRepresentation.setUsername(user.getEmail());
-        userRepresentation.setFirstName(user.getFirstName());
-        userRepresentation.setLastName(user.getLastName());
-        Map<String, List<String>> attributes = new HashMap<>();
-        attributes.put("global_id", List.of(user.getId().toString()));
-        userRepresentation.setAttributes(attributes);
 
-        String token = keycloakConfig.keycloak().tokenManager().getAccessToken().getToken();
-        Response response;
         try {
-            response = keycloakConfig.keycloak().realm(realm).users().create(userRepresentation);
-        }catch (Exception e){
-            return "User with:" + user.getEmail() + " already registered";
-        }
+            UserRepresentation userRepresentation = new UserRepresentation();
+            userRepresentation.setEmailVerified(false);
+            userRepresentation.setEnabled(true);
+            userRepresentation.setEmail(user.getEmail());
+            userRepresentation.setUsername(user.getEmail());
+            userRepresentation.setFirstName(user.getFirstName());
+            userRepresentation.setLastName(user.getLastName());
+            Map<String, List<String>> attributes = new HashMap<>();
+            attributes.put("global_id", List.of(user.getId().toString()));
+            userRepresentation.setAttributes(attributes);
 
-        String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
-        if (userId == null) {
+
+            Response response = keycloakConfig.keycloak().realm(realm).users().create(userRepresentation);
+
+            CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+            credentialRepresentation.setTemporary(false);
+            credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
+            credentialRepresentation.setValue(user.secretKey);
+
+            keycloakConfig.keycloak()
+                    .realm(realm)
+                    .users()
+                    .get(response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1"))
+                    .resetPassword(credentialRepresentation);
+
+        } catch (Exception e) {
             requestPersonAPIService.requestRemoveUserPersonAPI(user);
-            return new RuntimeException("User with:" + user.getEmail() + " already registered").toString();
+            throw new RuntimeException("An error occurred while saving the user in keycloak" + e.getMessage());
         }
 
-        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-        credentialRepresentation.setTemporary(false);
-        credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
-        credentialRepresentation.setValue(user.secretKey);
-
-        keycloakConfig.keycloak().realm(realm).users().get(userId).resetPassword(credentialRepresentation);
-        System.out.println(token);
-
-        return token;
+        return keycloakConfig.keycloak().tokenManager().getAccessToken().getToken();
     }
 }
