@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class RequestPersonAPIService {
+public class RequestPersonAPIClientService {
 
     private final RestTemplate restTemplate;
     private final UserMapper userMapper;

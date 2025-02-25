@@ -1,20 +1,15 @@
 package com.umaraliev.individualsapi.controllers;
 
 import com.umaraliev.common.dto.IndividualDTO;
-import com.umaraliev.common.dto.ResponseIndividualDTO;
 import com.umaraliev.individualsapi.configuration.KeycloakConfig;
 import com.umaraliev.individualsapi.dto.UserAuthTokenDTO;
 import com.umaraliev.individualsapi.model.User;
 import com.umaraliev.individualsapi.service.ReceiveUserTokensService;
-import com.umaraliev.individualsapi.service.RequestPersonAPIService;
-import com.umaraliev.individualsapi.service.TokenExchangeService;
-import com.umaraliev.individualsapi.service.UserRegistrationService;
+import com.umaraliev.individualsapi.service.RequestPersonAPIClientService;
+import com.umaraliev.individualsapi.service.UserRepositoryImpl;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.TestTemplate;
-import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.RealmsResource;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +33,10 @@ class AuthControllerTest {
     private ReceiveUserTokensService receiveUserTokensService;
 
     @Autowired
-    private RequestPersonAPIService requestPersonAPIService;
+    private RequestPersonAPIClientService requestPersonAPIClientService;
 
     @Autowired
-    private UserRegistrationService userRegistrationService;
+    private UserRepositoryImpl userRepositoryImpl;
 
     @Autowired
     private KeycloakConfig keycloakConfig;
@@ -90,13 +85,13 @@ class AuthControllerTest {
 
     @Test
     void testUserNewRegistration() {
-       User user = requestPersonAPIService.requestRegistrationUserPersonAPI(createTestIndividualDTO());
+       User user = requestPersonAPIClientService.requestRegistrationUserPersonAPI(createTestIndividualDTO());
        assertNotNull(user);
        assertEquals(user.getEmail(), createTestIndividualDTO().getUser().getEmail());
        assertEquals(user.getSecretKey(), createTestIndividualDTO().getUser().getSecretKey());
 
        UserAuthTokenDTO userAuthTokenDTO = new UserAuthTokenDTO(user.getEmail(), user.secretKey);
-       String token = userRegistrationService.createNewUser(user);
+       String token = userRepositoryImpl.createNewUser(user);
        assertNotNull(token);
 
         List<UserRepresentation> users = keycloakConfig.keycloak().realm(realm).users().searchByEmail(user.getEmail(), true);
