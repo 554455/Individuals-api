@@ -1,4 +1,4 @@
-package exception;
+package com.umaraliev.individualsapi.exception;
 
 public class KeycloakTimeoutException extends RuntimeException {
     public KeycloakTimeoutException(String message) {

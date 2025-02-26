@@ -1,4 +1,4 @@
-package exception;
+package com.umaraliev.individualsapi.exception;
 
 public class UserCreationException extends RuntimeException {
     public UserCreationException(String message) {

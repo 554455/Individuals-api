@@ -1,4 +1,4 @@
-package exception;
+package com.umaraliev.individualsapi.exception;
 
 import com.umaraliev.individualsapi.model.ErrorResponse;
 import org.springframework.http.HttpStatus;

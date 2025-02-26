@@ -4,12 +4,11 @@ package com.umaraliev.individualsapi.service;
 import com.umaraliev.individualsapi.configuration.KeycloakConfig;
 import com.umaraliev.individualsapi.dto.AuthTokenResponse;
 import com.umaraliev.individualsapi.dto.UserAuthTokenDTO;
+import com.umaraliev.individualsapi.exception.PasswordChangeException;
+import com.umaraliev.individualsapi.exception.TokenRetrievalException;
+import com.umaraliev.individualsapi.exception.UserCreationException;
 import com.umaraliev.individualsapi.model.User;
-import com.umaraliev.individualsapi.repository.UserRepository;
-import exception.KeycloakTimeoutException;
-import exception.PasswordChangeException;
-import exception.TokenRetrievalException;
-import exception.UserCreationException;
+import com.umaraliev.individualsapi.repository.AuthProvider;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserRepositoryImpl implements UserRepository{
+public class KeycloakClientService implements AuthProvider {
 
     @Value("${app.keycloak.realm}")
     private String realm;
@@ -34,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository{
     private final KeycloakConfig keycloakConfig;
 
     private final ReceiveUserTokensService receiveUserTokensService;
-    private final RequestPersonAPIClientService requestPersonAPIClientService;
+    private final PersonClientService personClientService;
 
     @Override
     public AuthTokenResponse createNewUser(User user) {
@@ -63,7 +62,7 @@ public class UserRepositoryImpl implements UserRepository{
 
             return authTokenResponse;
         }catch (UserCreationException e) {
-            requestPersonAPIClientService.requestRemoveUserPersonAPI(user);
+            personClientService.requestRemoveUserPersonAPI(user);
             throw new UserCreationException("User creation error", e);
         }
 
