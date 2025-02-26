@@ -18,7 +18,6 @@ public class UserRegistrationService {
     public AuthTokenResponse createNewUser(IndividualDTO individualDTO) {
         log.info("Request to save an individual in the person-api microservice" + individualDTO);
         User user = personClientService.requestRegistrationUserPersonAPI(individualDTO);
-
         return keycloakClientService.createNewUser(user);
     }
 }

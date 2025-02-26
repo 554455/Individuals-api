@@ -11,16 +11,16 @@ app:
   keycloak:
     admin:
       client-id: admin-cli
-      client-secret: YEO1Os7WQ9UGIIHQJPwSDakADpiOzjNY
+      client-secret: K6WL44pGrZY06owquPG1TdDam51GPi61
       username: admin
       password: admin
     realm: master
     user-auth-tokens:
       client-id: user-auth-tokens
-      client-secret: OozrPtLMCvUcmetbBoQYCnGh0FjJrwdV
+      client-secret: OBUCR6mlUeZhoATQEEqON8YjBGUqvGHu
     user-exchange-tokens:
       client-id: user-exchange-tokens
-      client-secret: mEOIABGoJKekNKCMfVPcG5PCn2w49FTf
+      client-secret: A6RMYlO04h4KihPYgjgWe4fP10GRnQHN
     serverUrl: http://localhost:8080
 server:
   port: 8081

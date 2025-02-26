@@ -2,6 +2,7 @@ package com.umaraliev.individualsapi.service;
 
 import com.umaraliev.common.dto.IndividualDTO;
 import com.umaraliev.common.dto.ResponseIndividualDTO;
+import com.umaraliev.individualsapi.exception.CommunicationPersonClientException;
 import com.umaraliev.individualsapi.mapper.UserMapper;
 import com.umaraliev.individualsapi.model.User;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class PersonClientService {
                     IndividualDTO,
                     ResponseIndividualDTO.class
             );
-        }catch (Exception e) {
+        }catch (CommunicationPersonClientException e) {
             throw new RuntimeException("An error occurred when requesting registration in the person-api microservice" + e.getMessage());
         }
         ResponseIndividualDTO responseIndividualDTO = responseIndividualDTOResponseEntity.getBody();
