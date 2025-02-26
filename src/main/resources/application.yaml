@@ -6,20 +6,21 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${app.keycloak.serverUrl}/realms/${app.keycloak.realm}
+          introspect-uri: ${app.keycloak.serverUrl}/realms/${app.keycloak.realm}/protocol/openid-connect/token/introspect
 app:
   keycloak:
     admin:
-      client-id: individuals-admin
-      client-secret: KOzy1W7CS1eHaa9qqIM4lEwzS97MyI2z
+      client-id: admin-cli
+      client-secret: YEO1Os7WQ9UGIIHQJPwSDakADpiOzjNY
       username: admin
       password: admin
     realm: master
     user-auth-tokens:
       client-id: user-auth-tokens
-      client-secret: OBUCR6mlUeZhoATQEEqON8YjBGUqvGHu
+      client-secret: OozrPtLMCvUcmetbBoQYCnGh0FjJrwdV
     user-exchange-tokens:
       client-id: user-exchange-tokens
-      client-secret: A6RMYlO04h4KihPYgjgWe4fP10GRnQHN
+      client-secret: mEOIABGoJKekNKCMfVPcG5PCn2w49FTf
     serverUrl: http://localhost:8080
 server:
   port: 8081
@@ -27,3 +28,7 @@ logging:
   level:
     org.springframework: DEBUG
     org.keycloak: DEBUG
+person:
+  api:
+    registration-url: http://localhost:8083/api/v1/auth/registration
+    remove-url: http://localhost:8083/api/v1/auth/remove

@@ -1,6 +1,7 @@
 package com.umaraliev.individualsapi.configuration;
 
 import com.umaraliev.individualsapi.dto.UserAuthTokenDTO;
+import com.umaraliev.individualsapi.model.User;
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientBuilderImpl;

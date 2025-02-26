@@ -2,11 +2,11 @@ package com.umaraliev.individualsapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
-@Import(TestcontainersConfiguration.class)
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-class IndividualsApiApplicationTests {
+class IndividualsApiApplicationTest {
 
     @Test
     void contextLoads() {
