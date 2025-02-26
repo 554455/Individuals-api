@@ -1,4 +1,4 @@
-package exception;
+package com.umaraliev.individualsapi.exception;
 
 public class TokenRetrievalException extends RuntimeException {
     public TokenRetrievalException(String message) {

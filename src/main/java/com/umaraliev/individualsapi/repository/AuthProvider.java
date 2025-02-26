@@ -5,6 +5,6 @@ import com.umaraliev.individualsapi.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface UserRepository {
+public interface AuthProvider {
     AuthTokenResponse createNewUser(User user);
 }

@@ -1,4 +1,4 @@
-package exception;
+package com.umaraliev.individualsapi.exception;
 
 public class PasswordChangeException extends RuntimeException{
     public PasswordChangeException(String message) {
