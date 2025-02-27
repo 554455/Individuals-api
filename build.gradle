@@ -45,6 +45,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
+    testImplementation group: 'org.wiremock', name: 'wiremock-standalone', version: "${wiremockVersion}"
+    testImplementation group: 'com.github.dasniko', name: 'testcontainers-keycloak', version: "${testcontainersKeycloakVersion}"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
