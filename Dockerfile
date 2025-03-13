@@ -1,4 +1,3 @@
-
 FROM gradle:8.5-jdk21 AS builder
 
 COPY . /app

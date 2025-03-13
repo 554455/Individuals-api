@@ -35,4 +35,10 @@ public class GlobalException {
         ErrorResponse errorResponse = new ErrorResponse("USER_TIMEOUT_ERROR", e.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(CommunicationPersonClientException.class)
+    public ResponseEntity<ErrorResponse> handleCommunicationPersonClientException(CommunicationPersonClientException e) {
+        ErrorResponse errorResponse = new ErrorResponse("PERSON_CLIENT_COMMUNICATION_ERROR", e.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }

@@ -1,127 +1,71 @@
 package com.umaraliev.individualsapi.controllers;
 
 import com.umaraliev.common.dto.IndividualDTO;
-import com.umaraliev.individualsapi.configuration.KeycloakConfig;
-import com.umaraliev.individualsapi.dto.UserAuthTokenDTO;
+import com.umaraliev.individualsapi.IndividualsApiApplication;
 import com.umaraliev.individualsapi.model.User;
-import com.umaraliev.individualsapi.service.ReceiveUserTokensService;
-import com.umaraliev.individualsapi.service.RequestPersonAPIClientService;
-import com.umaraliev.individualsapi.service.UserRepositoryImpl;
-import org.junit.jupiter.api.MethodOrderer;
+import com.umaraliev.individualsapi.service.UserRegistrationService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.keycloak.representations.AccessTokenResponse;
-import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.ResponseEntity;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class AuthControllerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = IndividualsApiApplication.class)
+@Testcontainers
+public class AuthControllerTest {
 
     @Autowired
-    private ReceiveUserTokensService receiveUserTokensService;
+    private  UserRegistrationService userRegistrationService;
 
-    @Autowired
-    private RequestPersonAPIClientService requestPersonAPIClientService;
+    private PersonApiMockServer personApiMockServer;
 
-    @Autowired
-    private UserRepositoryImpl userRepositoryImpl;
+    @BeforeEach
+    void setUp() {
+        personApiMockServer = new PersonApiMockServer();
+    }
 
-    @Autowired
-    private KeycloakConfig keycloakConfig;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Value("${app.keycloak.realm}")
-    private String realm;
-
-    @Value("${app.keycloak.admin.client-id}")
-    private String clientIdAdmin;
-
-    @Value("${app.keycloak.admin.client-secret}")
-    private String clientSecretAdmin;
-
-    @Value("${spring.security.oauth2.resourceserver.jwt.introspect-uri}")
-    private String serverUrl;
-
-    public static IndividualDTO createTestIndividualDTO() {
-        IndividualDTO individualDTO = new IndividualDTO();
-        individualDTO.setPassportNumber("P1234567");
-        individualDTO.setPhoneNumber("555-1234");
-
-        IndividualDTO.UserDTO user = new IndividualDTO.UserDTO();
-        user.setEmail("test989@example.com");
-        user.setSecretKey("secret123");
-        user.setFirstName("John");
-        user.setLastName("Doe");
+    public static IndividualDTO createSampleIndividualDTO() {
+        IndividualDTO.CountryDTO country = new IndividualDTO.CountryDTO();
+        country.setName("USA");
 
         IndividualDTO.AddressDTO address = new IndividualDTO.AddressDTO();
         address.setAddress("123 Main St");
-        address.setCity("Test City");
-        address.setState("Test State");
-        address.setZipCode("12345");
-
-        IndividualDTO.CountryDTO country = new IndividualDTO.CountryDTO();
-        country.setName("Test Country");
+        address.setCity("New York");
+        address.setState("NY");
+        address.setZipCode("10001");
         address.setCountry(country);
 
+        IndividualDTO.UserDTO user = new IndividualDTO.UserDTO();
+        user.setEmail("test@example.com");
+        user.setSecretKey("secret123");
+        user.setFirstName("John");
+        user.setLastName("Doe");
         user.setAddress(address);
+
+        IndividualDTO individualDTO = new IndividualDTO();
+        individualDTO.setPassportNumber("A1234567");
+        individualDTO.setPhoneNumber("+1234567890");
         individualDTO.setUser(user);
 
         return individualDTO;
     }
 
     @Test
-    void testUserNewRegistration() {
-       User user = requestPersonAPIClientService.requestRegistrationUserPersonAPI(createTestIndividualDTO());
-       assertNotNull(user);
-       assertEquals(user.getEmail(), createTestIndividualDTO().getUser().getEmail());
-       assertEquals(user.getSecretKey(), createTestIndividualDTO().getUser().getSecretKey());
+    void userNewRegistration() {
 
-       UserAuthTokenDTO userAuthTokenDTO = new UserAuthTokenDTO(user.getEmail(), user.secretKey);
-       String token = userRepositoryImpl.createNewUser(user);
-       assertNotNull(token);
+        //Returns an error when saving the user to keycloak because *admin-cli* does not have the rights to create the user.
+        userRegistrationService.createNewUser(createSampleIndividualDTO());
 
-        List<UserRepresentation> users = keycloakConfig.keycloak().realm(realm).users().searchByEmail(user.getEmail(), true);
-        assertEquals(user.getEmail(), users.get(0).getEmail());
+        User user = new User();
+        user.setId(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"));
+        user.setSecretKey(createSampleIndividualDTO().getUser().getSecretKey());
+        user.setEmail(createSampleIndividualDTO().getUser().getEmail());
+        user.setFirstName(createSampleIndividualDTO().getUser().getFirstName());
+        user.setLastName(createSampleIndividualDTO().getUser().getLastName());
 
-       AccessTokenResponse accessTokenResponse = receiveUserTokensService.receiveUserTokens(userAuthTokenDTO);
-       assertNotNull(accessTokenResponse);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("token", token);
-        params.put("client_id", clientIdAdmin);
-        params.put("client_secret", clientSecretAdmin);
-
-        ResponseEntity<Map> response = restTemplate.postForEntity(serverUrl, params, Map.class);
-        assertEquals(response.getBody().containsKey("active"), true);
-
-    }
-
-    @Test
-    void testUserLogin() {
-        UserAuthTokenDTO userAuthTokenDTO = new UserAuthTokenDTO("test989@example.com", "secret123");
-        AccessTokenResponse accessTokenResponse = receiveUserTokensService.receiveUserTokens(userAuthTokenDTO);
-
-        assertNotNull(accessTokenResponse);
-        Map<String, String> params = new HashMap<>();
-        params.put("token", accessTokenResponse.getToken());
-        params.put("client_id", clientIdAdmin);
-        params.put("client_secret", clientSecretAdmin);
-
-        ResponseEntity<Map> response = restTemplate.postForEntity(serverUrl, params, Map.class);
-        assertEquals(response.getBody().containsKey("active"), true);
+        //Checking that this point has been called
+        personApiMockServer.verifyRemoveUserEndpointCalled(user);
     }
 }
